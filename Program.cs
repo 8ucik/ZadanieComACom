@@ -97,7 +97,11 @@ namespace ZadanieComACom
                     tw.WriteLine(Environment.NewLine);
                 }
             }
-            Console.WriteLine("{0} Zakonczono tworzenie pliku wyjściowego.", DateTime.Now);
+
+            if (!File.Exists(plikWynikowy))
+                Console.WriteLine("Błąd! {0} nie został utworzony.", plikWynikowy);
+            else
+                Console.WriteLine("{0} Zakonczono tworzenie pliku wyjściowego.", DateTime.Now);
             #endregion
         }
 
