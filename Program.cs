@@ -2,10 +2,6 @@
 using System.Xml;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ZadanieComACom.Model;
 
 namespace ZadanieComACom
@@ -29,13 +25,14 @@ namespace ZadanieComACom
                 return;
             }
 
+            var defaultDir = @"c:\temp\";
             switch (Convert.ToInt32(wybierzOpcje))
             {
                 case 1:
-                    if (!Directory.Exists(@"c:\temp\"))
-                        Directory.CreateDirectory(@"c:\temp\");
+                    if (!Directory.Exists(defaultDir))
+                        Directory.CreateDirectory(defaultDir);
 
-                    var autoDaneWejscia = Directory.GetFiles(@"c:\temp\", "*.xml");
+                    var autoDaneWejscia = Directory.GetFiles(defaultDir, "*.xml");
                     WybierzDaneWejsciaUtworzNowyPlik(autoDaneWejscia);
                     break;
 
@@ -64,8 +61,8 @@ namespace ZadanieComACom
             var dzienChildNodes = xmlDoc.DocumentElement.ChildNodes;
             List<Dzien> listaDni = PobierzListeDni(dzienChildNodes);
             Console.WriteLine("{0} Zakonczono pobieranie danych wejsciowych.", DateTime.Now);
-            Console.WriteLine("Licznik plikow pracownikow: {0}", listaPracownikow.Count);
-            Console.WriteLine("Licznik plikow dni: {0}", listaDni.Count);
+            Console.WriteLine("Liczba wpisów z pracownikami {0}", listaPracownikow.Count);
+            Console.WriteLine("Liczba wpisów ze wszystkimi datami {0}", listaDni.Count);
             #endregion
 
             #region Algorytm do wyswietlenia danych
@@ -82,7 +79,7 @@ namespace ZadanieComACom
             #endregion
 
             #region Tworzenie pliku txt
-            Console.WriteLine("{0} Tworzenie pliku wyjściowego.", DateTime.Now);
+            Console.WriteLine("{0} Rozpoczęto tworzenie pliku wyjściowego.", DateTime.Now);
             using (TextWriter tw = new StreamWriter(plikWynikowy))
             {
                 foreach (var pracownik in listaPracownikow)
