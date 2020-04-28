@@ -88,6 +88,7 @@ namespace ZadanieComACom
         private static void WyswietlPrzetwarzanieNaEkranie(List<Pracownik> listaPracownikow, List<Dzien> listaDni)
         {
             #region Algorytm do wyswietlenia danych
+            Console.WriteLine("{0} Przetwarzanie danych.", DateTime.Now);
             foreach (var pracownik in listaPracownikow)
             {
                 Console.WriteLine(pracownik.GetNaglowek());
@@ -98,6 +99,7 @@ namespace ZadanieComACom
                 }
                 Console.WriteLine(Environment.NewLine);
             }
+            Console.WriteLine("{0} Zakończono przetwarzanie danych.", DateTime.Now);
             #endregion
         }
 
