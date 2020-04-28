@@ -37,13 +37,23 @@ namespace ZadanieComACom
                     break;
 
                 case 2:
-                    Console.WriteLine("Proszę podać pełną ściężę do plików wejściowych.\n pracownicy.xml");
+                    Console.WriteLine("Proszę podać pełną ściężę wraz z nazwą do plików wejściowych." +
+                        "\nPracownicy (pracownicy.xml)");
                     var wybierzPracownicy = Console.ReadLine();
-                    Console.WriteLine("dni.xml");
+                    Console.WriteLine("Dni (dni.xml)");
                     var wybierzDni = Console.ReadLine();
                     Console.WriteLine("Podaj pełną ścieżkę wraz z nazwą dla pliku wynikowego.");
                     var plikWynikowy = Console.ReadLine();
                     var daneWejsciowe = new string[] { wybierzDni, wybierzPracownicy };
+                    
+                    foreach (var plik in daneWejsciowe)
+                    {
+                        if (!File.Exists(plik))
+                        {
+                            Console.WriteLine("Błąd! Brak wybranego pliku: {0}", plik);
+                            break;
+                        }
+                    }
                     WybierzDaneWejsciaUtworzNowyPlik(daneWejsciowe, plikWynikowy);
                     break;
             }
