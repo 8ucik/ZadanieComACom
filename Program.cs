@@ -20,11 +20,14 @@ namespace ZadanieComACom
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Proszę wybrać: (1) Zaladuj pliki z domyślnej lokalizacji: " +
+            Console.WriteLine("Proszę wybrać: \n(1) Zaladuj pliki z domyślnej lokalizacji: " +
                 @"c:\temp\*." + "\n(2) Wybierz plik ręcznie.");
             var wybierzOpcje = Console.ReadLine();
             if (String.IsNullOrWhiteSpace(wybierzOpcje))
+            {
                 Console.WriteLine("Błąd. Nie wybrano żadnej opcji.");
+                return;
+            }
 
             switch (Convert.ToInt32(wybierzOpcje))
             {
@@ -88,7 +91,7 @@ namespace ZadanieComACom
                     //Console.WriteLine(pracownik.GetNaglowek());
                     foreach (var dzien in listaDni)
                     {
-                        if (pracownik.GetKod() == dzien.GetKodPracownika())
+                        if (pracownik.KodPracownika == dzien.GetKodPracownika())
                         {
                             //Console.WriteLine(dzien.GetNaglowek());
                             tw.WriteLine(dzien.GetNaglowek());
@@ -158,7 +161,7 @@ namespace ZadanieComACom
 
                 //Kod nie koniecznie może być jako int.
                 var pracownik = new Pracownik();
-                pracownik.SetKod(pracownikXml.Attributes.GetNamedItem("Kod").Value);
+                pracownik.KodPracownika = pracownikXml.Attributes.GetNamedItem("Kod").Value;
 
                 if (pracownikXml.HasChildNodes)
                 {

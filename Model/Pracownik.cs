@@ -12,14 +12,14 @@ namespace ZadanieComACom.Model
         string nazwisko { get; set; }
         string imie { get; set; }
 
-        public void SetKod(string wartosc)
-        {
-            this.kod = wartosc;
-        }
-        public string GetKod()
-        {
-            return this.kod;
-        }
+        //public void SetKod(string wartosc)
+        //{
+        //    this.kod = wartosc;
+        //}
+        //public string GetKod()
+        //{
+        //    return this.kod;
+        //}
         public void SetNazwisko(string wartosc)
         {
             this.nazwisko = wartosc;
@@ -47,6 +47,13 @@ namespace ZadanieComACom.Model
             var nazwiskoStr = "\"" + nazwisko + "\"; ";
 
             return String.Concat(pracownikStr, kodStr, imieStr, nazwiskoStr);
+        }
+
+        private string kodPracownika;
+        public string KodPracownika
+        {
+            get { return kodPracownika; }
+            set { kodPracownika = value; }
         }
     }
 }
