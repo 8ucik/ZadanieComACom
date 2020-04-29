@@ -11,15 +11,19 @@ namespace ZadanieComACom
         static void Main(string[] args)
         {
             // Z defaultu uzywalem tutaj c:\temp\, obecnie uzywam folderu z katalogu glownego.
-            var defaultDir = @"..\..\temp\";
             //var defaultDir = @"c:\temp\";
+            //var plikWynikowy = @"c:\temp\DniPracownicze.txt";
+
+            var defaultDir = Directory.GetParent(@"..\..\temp\").FullName;
+            var plikWyjsciowy = String.Concat(defaultDir, @"\DniPracownicze.txt");
+
             List<Pracownik> listaPracownikow;
             List<Dzien> listaDni;
 
-            Console.WriteLine("Wybirz jedną z dostępnych opcji." +
-                "\n1.Załaduj pliki z domyślnej lokalizacji ({0})." +
-                "\n2.Wybierz pliki ręcznie." +
-                "\n3.Załaduj pliki z domyślnej lokalizacji ({0}) i wyświetl przetwarzanie na ekranie.", defaultDir);
+            Console.WriteLine("Wybierz jedną z dostępnych opcji." +
+                "\n1.Wybierz pliki ręcznie." +
+                "\n2.Załaduj pliki z domyślnej lokalizacji: ( {0} )." +
+                "\n3.Załaduj pliki z domyślnej lokalizacji: ( {0} ) i wyświetl przetwarzanie na ekranie.", defaultDir);
 
             int.TryParse(Console.ReadLine(), out int wybierzOpcje);
             if (wybierzOpcje == 0)
@@ -31,63 +35,67 @@ namespace ZadanieComACom
             switch (wybierzOpcje)
             {
                 case 1:
-                    //var plikWynikowy = @"c:\temp\DniPracownicze.txt";
-                    var plikWynikowy = @"..\..\temp\DniPracownicze.txt";
-                    var daneWejsciowe = Directory.GetFiles(defaultDir, "*.xml");
-                    PobierzDaneWejsciowe(daneWejsciowe, out listaPracownikow, out listaDni);
-                    TworzeniePlikuTekstowego(plikWynikowy, listaPracownikow, listaDni);
-                    break;
-
-                case 2:
                     Console.WriteLine("Proszę podać pełną ściężę wraz z nazwą do plików wejściowych." +
                         "\nPracownicy (pracownicy.xml)");
                     var wybierzPracownicy = Console.ReadLine();
                     Console.WriteLine("Dni (dni.xml)");
                     var wybierzDni = Console.ReadLine();
                     Console.WriteLine("Podaj pełną ścieżkę wraz z nazwą dla pliku wynikowego.");
-                    plikWynikowy = Console.ReadLine();
-                    daneWejsciowe = new string[] { wybierzDni, wybierzPracownicy };
+                    plikWyjsciowy = Console.ReadLine();
+                    var daneWejsciowe = new string[] { wybierzDni, wybierzPracownicy };
                     PobierzDaneWejsciowe(daneWejsciowe, out listaPracownikow, out listaDni);
-                    TworzeniePlikuTekstowego(plikWynikowy, listaPracownikow, listaDni);
+                    TworzeniePlikuWyjściowego(plikWyjsciowy, listaPracownikow, listaDni);
+                    break;
+
+                case 2:
+                    daneWejsciowe = Directory.GetFiles(defaultDir, "*.xml");
+                    PobierzDaneWejsciowe(daneWejsciowe, out listaPracownikow, out listaDni);
+                    TworzeniePlikuWyjściowego(plikWyjsciowy, listaPracownikow, listaDni);
                     break;
 
                 case 3:
-                    plikWynikowy = @"..\..\temp\DniPracownicze.txt";
                     daneWejsciowe = Directory.GetFiles(defaultDir, "*.xml");
                     PobierzDaneWejsciowe(daneWejsciowe, out listaPracownikow, out listaDni);
                     WyswietlPrzetwarzanieNaEkranie(listaPracownikow, listaDni);
-                    TworzeniePlikuTekstowego(plikWynikowy, listaPracownikow, listaDni);
+                    TworzeniePlikuWyjściowego(plikWyjsciowy, listaPracownikow, listaDni);
                     break;
+
             }
+            Console.ReadKey();
         }
 
-        private static void TworzeniePlikuTekstowego(string plikWynikowy, List<Pracownik> listaPracownikow, List<Dzien> listaDni)
+        private static void TworzeniePlikuWyjściowego(string plikWyjsciowy, List<Pracownik> listaPracownikow, List<Dzien> listaDni)
         {
-            #region Tworzenie pliku txt
             Console.WriteLine("{0} Rozpoczęto tworzenie pliku wyjściowego.", DateTime.Now);
-            using (TextWriter tw = new StreamWriter(plikWynikowy))
+            using (TextWriter tw = new StreamWriter(plikWyjsciowy))
             {
-                foreach (var pracownik in listaPracownikow)
+                try
                 {
-                    tw.WriteLine(pracownik.GetNaglowek());
-                    foreach (var dzien in listaDni)
-                        if (pracownik.KodPracownika == dzien.GetKodPracownika())
-                            tw.WriteLine(dzien.GetNaglowek());
+                    foreach (var pracownik in listaPracownikow)
+                    {
+                        tw.WriteLine(pracownik.GetNaglowek());
+                        foreach (var dzien in listaDni)
+                            if (pracownik.KodPracownika == dzien.GetKodPracownika())
+                                tw.WriteLine(dzien.GetNaglowek());
 
-                    tw.WriteLine(Environment.NewLine);
+                        tw.WriteLine(Environment.NewLine);
+                    }
+                } 
+                catch (Exception ex)
+                {
+                    throw new Exception("Błąd! Nie udało się utworzyć pliku txt. - \n{0}", ex);
                 }
             }
 
-            if (!File.Exists(plikWynikowy))
-                Console.WriteLine("Błąd! {0} nie został utworzony.", plikWynikowy);
+            if (!File.Exists(plikWyjsciowy))
+                Console.WriteLine("Błąd! {0} Plik nie istnieje", plikWyjsciowy);
             else
-                Console.WriteLine("{0} Zakonczono tworzenie pliku wyjściowego.", DateTime.Now);
-            #endregion
+                Console.WriteLine("{0} Zakonczono tworzenie pliku wyjściowego." +
+                    "\nPlik dostępny pod ścieżką: {1}", DateTime.Now, plikWyjsciowy);
         }
 
         private static void WyswietlPrzetwarzanieNaEkranie(List<Pracownik> listaPracownikow, List<Dzien> listaDni)
         {
-            #region Algorytm do wyswietlenia danych
             Console.WriteLine("{0} Przetwarzanie danych.", DateTime.Now);
             foreach (var pracownik in listaPracownikow)
             {
@@ -100,24 +108,31 @@ namespace ZadanieComACom
                 Console.WriteLine(Environment.NewLine);
             }
             Console.WriteLine("{0} Zakończono przetwarzanie danych.", DateTime.Now);
-            #endregion
         }
 
         private static void PobierzDaneWejsciowe(string[] plikiWejscia, out List<Pracownik> listaPracownikow, out List<Dzien> listaDni)
         {
-            #region Pobieranie danych wejściowych
-            XmlDocument xmlDoc = new XmlDocument();
-            Console.WriteLine("{0} Rozpoczęto pobieranie danych wejsciowych.", DateTime.Now);
-            xmlDoc.Load(plikiWejscia[1]);
-            var pracownikChildNodes = xmlDoc.DocumentElement.ChildNodes;
-            listaPracownikow = PobierzListePracownikow(pracownikChildNodes);
-            xmlDoc.Load(plikiWejscia[0]);
-            var dzienChildNodes = xmlDoc.DocumentElement.ChildNodes;
-            listaDni = PobierzListeDni(dzienChildNodes);
-            Console.WriteLine("{0} Zakonczono pobieranie danych wejsciowych.", DateTime.Now);
-            Console.WriteLine("Liczba wpisów z pracownikami {0}", listaPracownikow.Count);
-            Console.WriteLine("Liczba wpisów ze wszystkimi datami {0}", listaDni.Count);
-            #endregion
+            listaPracownikow = new List<Pracownik>();
+            listaDni = new List<Dzien>();
+
+            try
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                Console.WriteLine("{0} Rozpoczęto pobieranie danych wejsciowych.", DateTime.Now);
+                xmlDoc.Load(plikiWejscia[1]);
+                var pracownikChildNodes = xmlDoc.DocumentElement.ChildNodes;
+                listaPracownikow = PobierzListePracownikow(pracownikChildNodes);
+                xmlDoc.Load(plikiWejscia[0]);
+                var dzienChildNodes = xmlDoc.DocumentElement.ChildNodes;
+                listaDni = PobierzListeDni(dzienChildNodes);
+                Console.WriteLine("{0} Zakonczono pobieranie danych wejsciowych.", DateTime.Now);
+                Console.WriteLine("Liczba wpisów z pracownikami {0}", listaPracownikow.Count);
+                Console.WriteLine("Liczba wpisów ze wszystkimi datami {0}", listaDni.Count);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Błąd. Podany plik nie istnieje \n{0}", ex);
+            }
         }
 
         private static List<Dzien> PobierzListeDni(XmlNodeList dzienChildNodes)
@@ -125,7 +140,6 @@ namespace ZadanieComACom
             var listaDni = new List<Dzien>();
             foreach (XmlNode dzienXml in dzienChildNodes)
             {
-
                 var dzien = new Dzien();
                 if (dzienXml.HasChildNodes)
                 {
@@ -159,9 +173,7 @@ namespace ZadanieComACom
                         }
                     }
                 }
-                //Console.WriteLine(dzien.GetNaglowek());
                 listaDni.Add(dzien);
-
             }
             return listaDni;
         }
