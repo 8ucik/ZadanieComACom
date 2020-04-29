@@ -11,11 +11,13 @@ namespace ZadanieComACom
         static void Main(string[] args)
         {
             // Z defaultu uzywalem tutaj c:\temp\, obecnie uzywam folderu z katalogu glownego.
+            // Obecnie dodałem App.config oraz ustawienia z domyślnymi sciezkami.
             //var defaultDir = @"c:\temp\";
             //var plikWynikowy = @"c:\temp\DniPracownicze.txt";
 
-            var defaultDir = Directory.GetParent(@"..\..\temp\").FullName;
-            var plikWyjsciowy = String.Concat(defaultDir, @"\DniPracownicze.txt");
+            var sciezkaZapisu = Directory.GetParent(Properties.Settings.Default.domyslnaSciezkaZapisu).FullName;
+            var plikZapisu = Properties.Settings.Default.domyslnyPlikZapisu;
+            var plikWyjsciowy = String.Concat(sciezkaZapisu, plikZapisu);
 
             List<Pracownik> listaPracownikow;
             List<Dzien> listaDni;
@@ -23,7 +25,7 @@ namespace ZadanieComACom
             Console.WriteLine("Wybierz jedną z dostępnych opcji." +
                 "\n1.Wybierz pliki ręcznie." +
                 "\n2.Załaduj pliki z domyślnej lokalizacji: ( {0} )." +
-                "\n3.Załaduj pliki z domyślnej lokalizacji: ( {0} ) i wyświetl przetwarzanie na ekranie.", defaultDir);
+                "\n3.Załaduj pliki z domyślnej lokalizacji: ( {0} ) i wyświetl przetwarzanie na ekranie.", sciezkaZapisu);
 
             int.TryParse(Console.ReadLine(), out int wybierzOpcje);
             if (wybierzOpcje == 0)
@@ -48,13 +50,13 @@ namespace ZadanieComACom
                     break;
 
                 case 2:
-                    daneWejsciowe = Directory.GetFiles(defaultDir, "*.xml");
+                    daneWejsciowe = Directory.GetFiles(sciezkaZapisu, "*.xml");
                     PobierzDaneWejsciowe(daneWejsciowe, out listaPracownikow, out listaDni);
                     TworzeniePlikuWyjściowego(plikWyjsciowy, listaPracownikow, listaDni);
                     break;
 
                 case 3:
-                    daneWejsciowe = Directory.GetFiles(defaultDir, "*.xml");
+                    daneWejsciowe = Directory.GetFiles(sciezkaZapisu, "*.xml");
                     PobierzDaneWejsciowe(daneWejsciowe, out listaPracownikow, out listaDni);
                     WyswietlPrzetwarzanieNaEkranie(listaPracownikow, listaDni);
                     TworzeniePlikuWyjściowego(plikWyjsciowy, listaPracownikow, listaDni);
