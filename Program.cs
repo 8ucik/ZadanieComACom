@@ -25,15 +25,10 @@ namespace ZadanieComACom
             Console.WriteLine("Wybierz jedną z dostępnych opcji." +
                 "\n1.Wybierz pliki ręcznie." +
                 "\n2.Załaduj pliki z domyślnej lokalizacji: ( {0} )." +
-                "\n3.Załaduj pliki z domyślnej lokalizacji: ( {0} ) i wyświetl przetwarzanie na ekranie.", sciezkaZapisu);
+                "\n3.Załaduj pliki z domyślnej lokalizacji: ( {0} ) i wyświetl przetwarzanie na ekranie." +
+                "\n4.Wyjście.", sciezkaZapisu);
 
             int.TryParse(Console.ReadLine(), out int wybierzOpcje);
-            if (wybierzOpcje == 0)
-            {
-                Console.WriteLine("Błąd. Nie wybrano żadnej opcji.");
-                return;
-            }
-
             switch (wybierzOpcje)
             {
                 case 1:
@@ -62,12 +57,22 @@ namespace ZadanieComACom
                     TworzeniePlikuWyjściowego(plikWyjsciowy, listaPracownikow, listaDni);
                     break;
 
+                case 4:
+                    Environment.Exit(0);
+                    break;
+
+                default:
+                    Console.WriteLine("Błąd. Nie rozpoznano opcji.");
+                    break;
+
             }
             Console.ReadKey();
         }
 
         private static void TworzeniePlikuWyjściowego(string plikWyjsciowy, List<Pracownik> listaPracownikow, List<Dzien> listaDni)
         {
+            CzyIstniejeZalegly(plikWyjsciowy);
+
             Console.WriteLine("{0} Rozpoczęto tworzenie pliku wyjściowego.", DateTime.Now);
             using (TextWriter tw = new StreamWriter(plikWyjsciowy))
             {
@@ -82,18 +87,32 @@ namespace ZadanieComACom
 
                         tw.WriteLine(Environment.NewLine);
                     }
-                } 
+                }
                 catch (Exception ex)
                 {
                     throw new Exception("Błąd! Nie udało się utworzyć pliku txt. - \n{0}", ex);
                 }
-            }
 
-            if (!File.Exists(plikWyjsciowy))
-                Console.WriteLine("Błąd! {0} Plik nie istnieje", plikWyjsciowy);
+                if (!File.Exists(plikWyjsciowy))
+                    Console.WriteLine("Błąd! {0} Plik nie istnieje", plikWyjsciowy);
+                else
+                    Console.WriteLine("{0} Zakonczono tworzenie pliku wyjściowego." +
+                        "\nPlik dostępny pod ścieżką: {1}", DateTime.Now, plikWyjsciowy);
+            }
+        }
+
+        private static void CzyIstniejeZalegly(string plikWyjsciowy)
+        {
+            Console.WriteLine("Weryfikacja czy plik wyjsciowy już istnieje: \n( {0} ) ", plikWyjsciowy);
+            if (File.Exists(plikWyjsciowy))
+            {
+                Console.WriteLine("Podany plik istnieje.");
+                var zapiszKopie = String.Concat(plikWyjsciowy, DateTime.Now.ToString("yyMMdd_HHmmss"), ".bak");
+                File.Move(plikWyjsciowy, zapiszKopie);
+                Console.WriteLine("Utworzono kopię pliku: \n( {0} )", zapiszKopie);
+            }
             else
-                Console.WriteLine("{0} Zakonczono tworzenie pliku wyjściowego." +
-                    "\nPlik dostępny pod ścieżką: {1}", DateTime.Now, plikWyjsciowy);
+                Console.WriteLine("Plik wyjściowy nie istnieje.");
         }
 
         private static void WyswietlPrzetwarzanieNaEkranie(List<Pracownik> listaPracownikow, List<Dzien> listaDni)

@@ -6,7 +6,7 @@
       <Value Profile="(Default)">..\..\temp\</Value>
     </Setting>
     <Setting Name="domyslnyPlikZapisu" Type="System.String" Scope="User">
-      <Value Profile="(Default)">\DniPracownicze.txt</Value>
+      <Value Profile="(Default)">\RejestrPrzepracowanychDni.txt</Value>
     </Setting>
   </Settings>
 </SettingsFile>

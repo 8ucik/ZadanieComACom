@@ -37,7 +37,7 @@ namespace ZadanieComACom.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\DniPracownicze.txt")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\RejestrPrzepracowanychDni.txt")]
         public string domyslnyPlikZapisu {
             get {
                 return ((string)(this["domyslnyPlikZapisu"]));
