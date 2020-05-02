@@ -4,9 +4,9 @@ namespace ZadanieComACom.Model
 {
     public class Pracownik
     {
-        string kod { get; set; }
         string nazwisko { get; set; }
         string imie { get; set; }
+        private string kodPracownika;
 
         //public void SetKod(string wartosc)
         //{
@@ -38,14 +38,13 @@ namespace ZadanieComACom.Model
         public string GetNaglowek()
         {
             var pracownikStr = "\"PRACOWNIK\"; ";
-            var kodStr = "\"" + kod + "\"; ";
+            var kodStr = "\"" + kodPracownika + "\"; ";
             var imieStr = "\"" + imie + "\"; ";
             var nazwiskoStr = "\"" + nazwisko + "\"; ";
 
             return String.Concat(pracownikStr, kodStr, imieStr, nazwiskoStr);
         }
 
-        private string kodPracownika;
         public string KodPracownika
         {
             get { return kodPracownika; }
