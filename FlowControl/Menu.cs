@@ -18,7 +18,7 @@ namespace ZadanieComACom.FlowControl
             
             var sciezkaZapisu = Directory.GetParent(Properties.Settings.Default.domyslnaSciezkaZapisu).FullName;
             var plikZapisu = Properties.Settings.Default.domyslnyPlikZapisu;
-            var plikWyjsciowy = String.Concat(sciezkaZapisu, plikZapisu);
+            var plikWyjsciowy = string.Concat(sciezkaZapisu, plikZapisu);
 
             List<Pracownik> listaPracownikow;
             List<Dzien> listaDni;
@@ -26,8 +26,8 @@ namespace ZadanieComACom.FlowControl
             Console.Clear();
             Console.WriteLine("Proszę wybrać jedną z dostępnych opcji:");
             Console.WriteLine("1) Wybierz pliki ręcznie.");
-            Console.WriteLine("2) Załaduj pliki z domyślnej lokalizacji ( {0} ).");
-            Console.WriteLine("3) Załaduj pliki z domyślnej lokalizacji ( {0} ) i wyświetl ich przetwarzanie na ekranie.");
+            Console.WriteLine("2) Załaduj pliki z domyślnej lokalizacji [ {0} ].", sciezkaZapisu);
+            Console.WriteLine("3) Załaduj pliki z domyślnej lokalizacji [ {0} ] i wyświetl przetwarzanie na ekranie.", sciezkaZapisu);
             Console.WriteLine("4) Wyjście.");
 
             int.TryParse(Console.ReadLine(), out int wybierzOpcje);
@@ -60,6 +60,7 @@ namespace ZadanieComACom.FlowControl
                     return true;
 
                 case 4:
+                    Console.WriteLine("Do widzenia.");
                     Environment.Exit(0);
                     return false;
 

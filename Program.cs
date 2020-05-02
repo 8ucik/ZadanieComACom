@@ -11,8 +11,9 @@ namespace ZadanieComACom
             while (pokazMenu)
             {
                 pokazMenu = Menu.PokazMenu();
+                Console.WriteLine("Naciśnij dowolny klawisz aby kontynuować...");
+                Console.ReadKey();
             }
-            Console.ReadKey();
         }
     }
 }
