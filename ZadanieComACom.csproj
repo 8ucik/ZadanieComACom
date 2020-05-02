@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FlowControl\KontrolaPlikow.cs" />
+    <Compile Include="FlowControl\Menu.cs" />
     <Compile Include="Model\Dzien.cs" />
     <Compile Include="Model\Pracownik.cs" />
     <Compile Include="Program.cs" />
@@ -64,5 +66,6 @@
     <Content Include="temp\dni.xml" />
     <Content Include="temp\pracownicy.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
